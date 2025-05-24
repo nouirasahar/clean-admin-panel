@@ -1,21 +1,8 @@
 
 import { useParams, Link } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
-import ActionButton from "../components/ActionButton";
-import TableRow from "../components/TableRow";
-
-// Mock data for demonstration
-const mockData: Record<string, any[]> = {
-  support: [
-    { id: "636771c1736c0b13bc6e1", title: "Not character", description: "dental dentist", created_at: "2023-05", updated_at: "2023-05", is_active: true, tags: "mile beyond", views: 180 },
-    { id: "636771c1736c0b13bc6e2", title: "Medical", description: "Job medical", created_at: "2023-05", updated_at: "2023-05", is_active: false, tags: "speech elections high those", views: 679 },
-    { id: "636771c1736c0b13bc6e3", title: "Read prevent", description: "Hi bye test truth", created_at: "2023-05", updated_at: "2023-05", is_active: true, tags: "help watching", views: 519 }
-  ],
-  tickets: [
-    { id: "1", title: "Bug Report", status: "Open", priority: "High", created_at: "2023-05-15", assignee: "John Doe" },
-    { id: "2", title: "Feature Request", status: "In Progress", priority: "Medium", created_at: "2023-05-14", assignee: "Jane Smith" }
-  ]
-};
+import { mockData } from "../data/mockData";
+import { ArrowLeft, Eye, Edit3, Trash2 } from "lucide-react";
 
 const TableView = () => {
   const { tableName } = useParams<{ tableName: string }>();
@@ -29,81 +16,90 @@ const TableView = () => {
     <AdminLayout>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-8 flex items-center justify-between">
           <div>
-            <Link to="/admin" className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-2 inline-block">
-              ← Back to Dashboard
+            <Link to="/admin" className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium mb-4 transition-colors">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Dashboard
             </Link>
-            <h1 className="text-3xl font-bold text-gray-800 capitalize">
+            <h1 className="text-3xl font-bold text-gray-900 capitalize">
               {tableName} Table
             </h1>
+            <p className="text-gray-600 mt-2">Manage {tableName} records and data</p>
           </div>
         </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        {/* Enhanced Table */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
           {/* Table Header */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-            <div className="grid grid-cols-8 gap-4 p-4 text-sm font-semibold">
+            <div className="grid grid-cols-8 gap-4 p-6 text-sm font-semibold">
               <div>ID</div>
               <div>TITLE</div>
               <div>DESCRIPTION</div>
-              <div>CREATED AT</div>
-              <div>UPDATED AT</div>
-              <div>IS ACTIVE</div>
+              <div>CREATED</div>
+              <div>UPDATED</div>
+              <div>STATUS</div>
               <div>TAGS</div>
               <div>ACTIONS</div>
             </div>
           </div>
 
           {/* Table Body */}
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-100">
             {data.length > 0 ? (
               data.map((item, index) => (
-                <TableRow key={item.id || index}>
-                  <td className="px-4 py-4 text-sm text-gray-600">{item.id}</td>
-                  <td className="px-4 py-4 text-sm font-medium text-gray-800">{item.title}</td>
-                  <td className="px-4 py-4 text-sm text-gray-600 max-w-xs truncate">{item.description}</td>
-                  <td className="px-4 py-4 text-sm text-gray-600">{item.created_at}</td>
-                  <td className="px-4 py-4 text-sm text-gray-600">{item.updated_at}</td>
-                  <td className="px-4 py-4 text-sm">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      item.is_active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                    }`}>
-                      {item.is_active ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4 text-sm text-gray-600 max-w-xs truncate">{item.tags}</td>
-                  <td className="px-4 py-4">
-                    <div className="flex space-x-2">
-                      <ActionButton 
-                        variant="view"
-                        onClick={() => console.log(`View ${item.id}`)}
-                      >
-                        👁️
-                      </ActionButton>
-                      <ActionButton 
-                        variant="update"
-                        onClick={() => console.log(`Update ${item.id}`)}
-                      >
-                        ✏️
-                      </ActionButton>
-                      <ActionButton 
-                        variant="delete"
-                        onClick={() => console.log(`Delete ${item.id}`)}
-                      >
-                        🗑️
-                      </ActionButton>
+                <div key={item.id || index} className="p-6 hover:bg-gray-50 transition-colors duration-200">
+                  <div className="grid grid-cols-8 gap-4 items-center text-sm">
+                    <div className="text-gray-600 font-mono">{item.id}</div>
+                    <div className="font-medium text-gray-900">{item.title}</div>
+                    <div className="text-gray-600 max-w-xs truncate">{item.description}</div>
+                    <div className="text-gray-600">{item.created_at}</div>
+                    <div className="text-gray-600">{item.updated_at}</div>
+                    <div>
+                      <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                        item.is_active 
+                          ? "bg-green-100 text-green-800" 
+                          : "bg-red-100 text-red-800"
+                      }`}>
+                        {item.is_active ? "Active" : "Inactive"}
+                      </span>
                     </div>
-                  </td>
-                </TableRow>
+                    <div className="text-gray-600 max-w-xs truncate">{item.tags}</div>
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={() => console.log(`View ${item.id}`)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="View"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => console.log(`Update ${item.id}`)}
+                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                        title="Update"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => console.log(`Delete ${item.id}`)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))
             ) : (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-gray-500">
-                  No data available for {tableName}
-                </td>
-              </tr>
+              <div className="p-12 text-center text-gray-500">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Eye className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No data available</h3>
+                <p>No records found for {tableName} table</p>
+              </div>
             )}
           </div>
         </div>
